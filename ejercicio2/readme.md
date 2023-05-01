@@ -6,7 +6,8 @@ With this application you can:
 2. Read
 3. Update
 4. Delete
-Products and save the information in a json.
+# Products and save the information in a json.
+# 
 #
-.File System added to excercise one for persistence.
+File System added to excercise one for persistence.
 
