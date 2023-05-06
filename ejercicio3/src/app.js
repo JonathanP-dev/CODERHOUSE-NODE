@@ -8,7 +8,6 @@ app.use( express.urlencoded( { extended: true } ) )
 
 const manager = new ProductManager()
 
-
 app.get( '/products', async ( req, res ) => {
   let { limit } = req.query
   const contain = await manager.getProducts()

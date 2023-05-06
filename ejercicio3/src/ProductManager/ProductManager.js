@@ -148,21 +148,29 @@ export default class ProductManager {
   async deleteProduct ( id ) {
     try {
       const contain = await fs.promises.readFile( this.#path )
-      const products = JSON.parse( contain )
-      const found = products.find( product => product.id == id )
-      if ( !found ) return `Product with ID: ${id} not found`
+      let products = JSON.parse( contain )
 
-      products.map( ( item, index ) => {
-        if ( item.id == id ) {
-          products.splice( index, 1 )
-          fs.promises.writeFile( this.#path, JSON.stringify( products ) )
-          console.log( `Product with ID ${id} deleted.` )
-          this.#products = products
-          // chequear return aca.. undefined 
-          // return `Product with ID ${id} deleted.`
-        }
-      } )
-      return found
+      const newProducts = products.filter( product => product.id !== id )
+      if ( products.length == newProducts.length ) return console.log( `Product with ID: ${id} not found` )
+      products = newProducts;
+      fs.promises.writeFile( this.#path, JSON.stringify( products ) )
+      console.log( `Product with ID ${id} deleted.` )
+      this.#products = products
+      return products
+      // const found = products.find( product => product.id == id )
+      // if ( !found ) return `Product with ID: ${id} not found`
+
+      // products.map( ( item, index ) => {
+      //   if ( item.id == id ) {
+      //     products.splice( index, 1 )
+      //     fs.promises.writeFile( this.#path, JSON.stringify( products ) )
+      //     console.log( `Product with ID ${id} deleted.` )
+      //     this.#products = products
+      //     // chequear return aca.. undefined 
+      //     // return `Product with ID ${id} deleted.`
+      //   }
+      // } )
+      // return found
     } catch ( error ) {
       if ( error.code == 'ENOENT' ) {
         return this.#products;
