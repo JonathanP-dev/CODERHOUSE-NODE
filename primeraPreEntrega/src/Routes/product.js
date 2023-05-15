@@ -5,6 +5,10 @@ const productRouter = Router()
 
 const productManager = new ProductManager()
 
+
+// GET PRODUCTS
+// DEVUELVE UNA LISTA DE TODOS LOS PRODUCTOS GUARDADOS EN EL ARCHIVO products.json
+// ACEPTA QUERY LIMIT PARA DEFINIR LA CANTIDAD A DEVOLVER
 productRouter.get( '/', async ( req, res ) => {
   let { limit } = req.query
   const contain = await productManager.getProducts()
@@ -22,15 +26,21 @@ productRouter.get( '/', async ( req, res ) => {
   res.send( { products } )
 } )
 
+
+// GET PRODUCT BY ID
+// MUESTRA EL PRODUCTO QUE TIENE EL ID PASADO POR PARAMETRO
 productRouter.get( '/:pid', async ( req, res ) => {
   let id = req.params.pid
   let response = await productManager.getProductById( id )
-  // doble validacion
+  // doble validacion???
   let product = response?.id ? response : res.status( 404 ).send( { status: "error", msg: "Product not found" } )
 
   res.send( { product } )
 } )
 
+// PUT PRODUCT BY ID
+// RECIBE POR BODY UN PRODUCTO Y POR PARAMETRO UN ID, SI PASA LAS VALIDACIONES QUE TIENE EL METODO updateProduct
+// REESCRIBE EL ARCHIVO products.json CON EL PRODUCTO MODIFICADO
 productRouter.put( '/:pid', async ( req, res ) => {
   let id = req.params.pid
   let product = req.body
@@ -42,6 +52,8 @@ productRouter.put( '/:pid', async ( req, res ) => {
   }
 } )
 
+// POST PRODUCT
+// RECIBE POR BODY UN PRODUCTO Y LO AGREGA EN EL ARCHIVO product.json
 productRouter.post( '/', async ( req, res ) => {
   let product = req.body
   let response = await productManager.addProduct( product )
@@ -51,6 +63,9 @@ productRouter.post( '/', async ( req, res ) => {
   res.send( { status: 'Success', msg: `Product added` } )
 } )
 
+
+// DELETE PRODUCT
+// RECIBE UN ID POR PARAMETRO Y BORRA DEL ARCHIVO EL PRODUCTO CON ESE ID
 productRouter.delete( '/:pid', async ( req, res ) => {
   let id = req.params.pid
   let response = await productManager.deleteProduct( id )

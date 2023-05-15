@@ -43,6 +43,10 @@ get carts
 url: http://localhost:8080/api/carts/
 
 
+get carts con limit
+url: http://localhost:8080/api/carts?limit=1
+
+
 get cart products by id
 url: http://localhost:8080/api/carts/1684172023667-1
 

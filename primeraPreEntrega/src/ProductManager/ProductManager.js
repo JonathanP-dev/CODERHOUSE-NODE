@@ -10,6 +10,8 @@ export default class ProductManager {
     this.#path = './products.json'
   }
 
+  // Para crear el ID lo hago con un Date.now(), ademas le concateno el length porque no estoy 100% seguro de que el Date.now() no se pueda repetir si se hace muy rapido.
+  // De esa forma me aseguro que no se va a repetir.
   async #setId () {
     try {
       const contain = await fs.promises.readFile( this.#path )
@@ -38,6 +40,7 @@ export default class ProductManager {
       thumbnail: product.thumb ? product.thumb : ['Sin imagen'],
       stock: product.stock
     }
+
     // verificamos que el producto a agregar tenga todos los valores. 
     // Lo hacemos al inicio porque si no cuenta con un valor no tiene sentido leer el archivo.
     if ( !product.title || !product.code || !product.desc || !product.price || !product.category || !product.stock ) {
@@ -82,6 +85,7 @@ export default class ProductManager {
     }
   }
 
+  // Trato de leer el archivo, si no existe retorno un array vacio, si exite retorno lo que necesito.
   async getProducts () {
     try {
       const contain = await fs.promises.readFile( this.#path )
@@ -116,6 +120,7 @@ export default class ProductManager {
     }
   }
 
+
   async updateProduct ( id, product ) {
     if ( !product.title || !product.code || !product.desc || !product.price || !product.category || !product.stock ) {
       console.log( `Invalid value.` )
@@ -128,6 +133,7 @@ export default class ProductManager {
       const contain = await fs.promises.readFile( this.#path )
       const products = JSON.parse( contain )
       this.#products = products
+
       // controlo que exista el producto con el id pasado
       const found = products.find( exists => exists.id == id )
       if ( !found ) {
@@ -144,6 +150,9 @@ export default class ProductManager {
           return false;
         }
       }
+
+      // una vez pasadas todas la validaciones lo que hago es recorrer el arreglo, sustituir el producto viejo por el nuevo
+      // conservando el id anterior y lo guardo en el archivo.
       const newProducts = this.#products
       products.map( ( item, index ) => {
         if ( item.id == id ) {
@@ -166,16 +175,22 @@ export default class ProductManager {
     }
   }
 
+
   async deleteProduct ( id ) {
     try {
       const contain = await fs.promises.readFile( this.#path )
       let products = JSON.parse( contain )
 
+      // para eliminar el producto primero compruebo que exista. Con el filter me encargo de eso
+      // Si el arreglo que obtengo despues de filtrar es igual de largo que el anterior entonces no filtro nada, por ende
+      // no encontro el producto con el id pasado por parametro.
       const newProducts = products.filter( product => product.id !== id )
       if ( products.length == newProducts.length ) {
         console.log( `Product with ID: ${id} not found` )
         return false;
       }
+
+      // si pasa la validacion anterior entonces directamente reescribo el archivo con el arreglo filtrado
       products = newProducts;
       fs.promises.writeFile( this.#path, JSON.stringify( products ) )
       console.log( `Product with ID ${id} deleted.` )
