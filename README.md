@@ -1,16 +1,20 @@
 # POSTMAN FACILITIES
 
 ## PRODUCTS
-get products
+get products 
+#
 url: http://localhost:8080/api/products/
 
 
 get product by id
+#
 url: http://localhost:8080/api/products/1684166435304-9
 
 
 post product
+#
 url: http://localhost:8080/api/products/
+#
 body:
 {
   "code": 10009,
@@ -23,7 +27,9 @@ body:
 
 
 put product
+#
 url: http://localhost:8080/api/products/1684166435300-5
+#
 body:
 {
   "code": 11440,
@@ -36,24 +42,29 @@ body:
 
 
 delete product
+#
 url: http://localhost:8080/api/products/1684166435300-5
 
 ## CARTS
 get carts
+#
 url: http://localhost:8080/api/carts/
 
 
 get carts con limit
+#
 url: http://localhost:8080/api/carts?limit=1
 
 
 get cart products by id
+#
 url: http://localhost:8080/api/carts/1684172023667-1
 
 
-// para ingresar un carrito hay que ingresar al menos un producto, la cantidad iniciar la mandamos por body
 post cart
+#
 url: http://localhost:8080/api/carts/
+#
 body:
 [
     {
@@ -64,4 +75,5 @@ body:
 
 
 post product to cart by id
+#
 url: http://localhost:8080/api/carts/1684171837914-0/product/1684166435300-5
